@@ -2,13 +2,16 @@ package com.kfp.bookstore.book.infrastructure;
 
 import com.kfp.bookstore.book.application.AddBook;
 import com.kfp.bookstore.book.application.ListBooks;
+import com.kfp.bookstore.book.application.UpdateBook;
 import com.kfp.bookstore.book.domain.Book;
 import com.kfp.bookstore.book.infrastructure.record.BookRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,16 +25,28 @@ public class BookController {
 
     private final ListBooks listBooks;
     private final AddBook addBook;
+    private final UpdateBook updateBook;
 
     @GetMapping
-    ResponseEntity<List<Book>> listBooks(){
+    ResponseEntity<List<Book>> list(){
+
         return new ResponseEntity<>(listBooks.execute(), HttpStatus.OK);
     }
 
     @PostMapping
-    ResponseEntity<Void> save(@RequestBody BookRecord book){
+    ResponseEntity<Void> add(@RequestBody BookRecord book){
         addBook.execute(book.toBook());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PutMapping("/{bookId}")
+    ResponseEntity<Void> update(
+            @PathVariable("bookId") Integer bookId,
+            @RequestBody BookRecord book){
+        updateBook.execute(bookId, book.toBook());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 
 }
