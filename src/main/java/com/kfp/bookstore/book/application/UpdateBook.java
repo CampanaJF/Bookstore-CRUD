@@ -11,6 +11,6 @@ public class UpdateBook {
 
     private final BookRepository bookRepository;
     public void execute(Integer bookId, Book book) {
-        
+
     }
 }

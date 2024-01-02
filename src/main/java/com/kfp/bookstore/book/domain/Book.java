@@ -1,5 +1,6 @@
 package com.kfp.bookstore.book.domain;
 
+import com.kfp.bookstore.inventory.domain.Inventory;
 import com.kfp.bookstore.subject.domain.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +20,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,9 @@ public class Book {
     @Column(name = "date_of_publishing")
     private Date dateOfPublishing;
 
-    private BigDecimal price;
+    @ManyToOne
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
