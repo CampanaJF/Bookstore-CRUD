@@ -1,7 +1,9 @@
 package com.kfp.bookstore.book.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kfp.bookstore.inventory.domain.Inventory;
 import com.kfp.bookstore.subject.domain.Subject;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,8 +20,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -47,10 +47,9 @@ public class Book {
 
     @Column(name = "date_of_publishing")
     private Date dateOfPublishing;
-
-    @OneToOne
-    @Cascade(CascadeType.ALL)
-    @JoinColumn(name = "inventory_id")
+    
+    @JsonIgnore
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
     private Inventory inventory;
 
     @ManyToMany(fetch = FetchType.EAGER)

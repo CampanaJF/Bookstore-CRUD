@@ -1,11 +1,12 @@
 package com.kfp.bookstore.inventory.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kfp.bookstore.book.domain.Book;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,8 +28,8 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "inventory")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
     private BigDecimal price;
