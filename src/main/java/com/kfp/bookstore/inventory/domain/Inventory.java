@@ -1,7 +1,7 @@
 package com.kfp.bookstore.inventory.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kfp.bookstore.book.domain.Book;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,8 +28,9 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "book_id", unique = true)
     private Book book;
 
     private BigDecimal price;

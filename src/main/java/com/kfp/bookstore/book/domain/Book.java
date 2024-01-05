@@ -1,6 +1,5 @@
 package com.kfp.bookstore.book.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kfp.bookstore.inventory.domain.Inventory;
 import com.kfp.bookstore.subject.domain.Subject;
 import jakarta.persistence.CascadeType;
@@ -47,9 +46,8 @@ public class Book {
 
     @Column(name = "date_of_publishing")
     private Date dateOfPublishing;
-    
-    @JsonIgnore
-    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Inventory inventory;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -2,12 +2,15 @@ package com.kfp.bookstore.book.application;
 
 import com.kfp.bookstore.book.domain.Book;
 import com.kfp.bookstore.book.domain.BookRepository;
+import com.kfp.bookstore.inventory.domain.Inventory;
 import com.kfp.bookstore.subject.domain.Subject;
 import com.kfp.bookstore.subject.domain.SubjectRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static java.math.BigDecimal.valueOf;
 
 @Service
 @AllArgsConstructor
@@ -17,9 +20,15 @@ public class AddBook {
     private final SubjectRepository subjectRepository;
     public void execute(Book book, List<Integer> subjectsId) {
 
+        Inventory blankInventory = Inventory.builder()
+                .book(book)
+                .stock(0)
+                .price(valueOf(0)).build();
+
         List<Subject> subjects = getSubjects(subjectsId);
 
         book.setSubjects(subjects);
+        book.setInventory(blankInventory);
 
         this.bookRepository.save(book);
     }
