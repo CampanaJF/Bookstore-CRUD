@@ -4,6 +4,7 @@ import com.kfp.bookstore.book.application.AddBook;
 import com.kfp.bookstore.book.application.ListBooks;
 import com.kfp.bookstore.book.application.UpdateBook;
 import com.kfp.bookstore.book.domain.Book;
+import com.kfp.bookstore.book.domain.exception.BookNotFoundException;
 import com.kfp.bookstore.book.infrastructure.record.BookRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class BookController {
 
     @PostMapping
     ResponseEntity<Void> add(@RequestBody BookRecord book){
-        addBook.execute(book.toBook());
+        addBook.execute(book.toBook(),book.subjects());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -43,10 +45,13 @@ public class BookController {
     ResponseEntity<Void> update(
             @PathVariable("bookId") Integer bookId,
             @RequestBody BookRecord book){
-        updateBook.execute(bookId, book.toBook());
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            updateBook.execute(bookId, book.toBook(), book.subjects());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(BookNotFoundException e){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The requested book does not exist", e);
+        }
     }
-
-
 
 }

@@ -11,9 +11,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -46,19 +48,19 @@ public class Book {
     @Column(name = "date_of_publishing")
     private Date dateOfPublishing;
 
-    @ManyToOne
+    @OneToOne
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "book_subjects",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private Set<Subject> subjects = new HashSet<>();
 
-    public Book(List<Subject> subjects) {
+    public void setSubjects(List<Subject> subjects){
         this.subjects = new HashSet<>(subjects);
     }
 

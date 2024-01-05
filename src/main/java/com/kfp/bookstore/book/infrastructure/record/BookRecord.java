@@ -1,7 +1,7 @@
 package com.kfp.bookstore.book.infrastructure.record;
 
 import com.kfp.bookstore.book.domain.Book;
-import com.kfp.bookstore.subject.domain.Subject;
+import com.kfp.bookstore.inventory.domain.Inventory;
 
 import java.util.Date;
 import java.util.List;
@@ -11,16 +11,17 @@ public record BookRecord (
         String author,
         String publisher,
         Date dateOfPublishing,
-        List<Subject> subjects){
+        List<Integer> subjects,
+        Inventory inventory){
 
     public Book toBook(){
 
-        Book book = new Book(subjects);
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setPublisher(publisher);
-        book.setDateOfPublishing(dateOfPublishing);
-
-        return book;
+        return Book.builder()
+                .title(title)
+                .dateOfPublishing(dateOfPublishing)
+                .author(author)
+                .publisher(publisher)
+                .inventory(inventory)
+                .build();
     }
 }

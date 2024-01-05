@@ -2,6 +2,7 @@ package com.kfp.bookstore.book.infrastructure;
 
 import com.kfp.bookstore.book.domain.Book;
 import com.kfp.bookstore.book.domain.BookRepository;
+import com.kfp.bookstore.book.domain.exception.BookNotFoundException;
 import com.kfp.bookstore.book.infrastructure.jpa.BookJpaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,5 +22,11 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public void save(Book book) {
         bookJpaRepository.save(book);
+    }
+
+    @Override
+    public Book findById(Integer id) {
+        return bookJpaRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("The requested book was not found"));
     }
 }

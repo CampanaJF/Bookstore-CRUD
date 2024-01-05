@@ -2,6 +2,7 @@ package com.kfp.bookstore.subject.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kfp.bookstore.book.domain.Book;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,8 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.util.Set;
 
@@ -32,10 +31,10 @@ public class Subject {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
+    @Column(unique = true, name = "subject")
     private SubjectType name;
 
     @ManyToMany(mappedBy = "subjects")
-    @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore
     private Set<Book> books;
 
