@@ -61,4 +61,8 @@ public class Book {
         this.subjects = new HashSet<>(subjects);
     }
 
+    public void setSubjects(Set<Subject> subjects){
+        this.subjects = subjects;
+    }
+
 }

@@ -7,6 +7,7 @@ import com.kfp.bookstore.book.application.ListBooks;
 import com.kfp.bookstore.book.application.UpdateBook;
 import com.kfp.bookstore.book.domain.Book;
 import com.kfp.bookstore.book.domain.exception.BookNotFoundException;
+import com.kfp.bookstore.book.domain.exception.InvalidInputException;
 import com.kfp.bookstore.book.infrastructure.record.BookRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class BookController {
 
     @PostMapping
     ResponseEntity<Void> add(@RequestBody BookRecord book){
-        addBook.execute(book.toBook(),book.subjects());
+        addBook.execute(book.toBook());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -56,11 +57,14 @@ public class BookController {
             @PathVariable("bookId") Integer bookId,
             @RequestBody BookRecord book){
         try{
-            updateBook.execute(bookId, book.toBook(), book.subjects());
+            updateBook.execute(bookId, book.toBook());
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(BookNotFoundException e){
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The requested book does not exist", e);
+                    HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }catch(InvalidInputException e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
