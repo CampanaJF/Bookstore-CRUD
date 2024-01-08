@@ -32,7 +32,7 @@ public class UpdateBook {
         validateStrings(book.getAuthor(),book.getTitle(),book.getPublisher());
         validateDate(book.getDateOfPublishing());
     }
-    
+
 
     private void validateStrings(String author, String title, String publisher) {
         if(author.isEmpty() || title.isEmpty() || publisher.isEmpty()){
