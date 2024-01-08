@@ -1,6 +1,8 @@
 package com.kfp.bookstore.book.infrastructure;
 
 import com.kfp.bookstore.book.application.AddBook;
+import com.kfp.bookstore.book.application.DeleteBook;
+import com.kfp.bookstore.book.application.FindBook;
 import com.kfp.bookstore.book.application.ListBooks;
 import com.kfp.bookstore.book.application.UpdateBook;
 import com.kfp.bookstore.book.domain.Book;
@@ -9,6 +11,7 @@ import com.kfp.bookstore.book.infrastructure.record.BookRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,11 +31,18 @@ public class BookController {
     private final ListBooks listBooks;
     private final AddBook addBook;
     private final UpdateBook updateBook;
+    private final FindBook findBook;
+    private final DeleteBook deleteBook;
 
     @GetMapping
     ResponseEntity<List<Book>> list(){
-
         return new ResponseEntity<>(listBooks.execute(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{bookId}")
+    ResponseEntity<Book> get(
+            @PathVariable("bookId") Integer bookId){
+        return new ResponseEntity<>(findBook.execute(bookId), HttpStatus.OK);
     }
 
     @PostMapping
@@ -48,6 +58,18 @@ public class BookController {
         try{
             updateBook.execute(bookId, book.toBook(), book.subjects());
             return new ResponseEntity<>(HttpStatus.OK);
+        }catch(BookNotFoundException e){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The requested book does not exist", e);
+        }
+    }
+
+    @DeleteMapping("/{bookId}")
+    ResponseEntity<Void> delete(
+            @PathVariable("bookId") Integer bookId){
+        try{
+            deleteBook.execute(bookId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch(BookNotFoundException e){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "The requested book does not exist", e);
