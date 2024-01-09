@@ -3,9 +3,11 @@ package com.kfp.bookstore.book.infrastructure;
 import com.kfp.bookstore.book.application.AddBook;
 import com.kfp.bookstore.book.application.DeleteBook;
 import com.kfp.bookstore.book.application.FindBook;
+import com.kfp.bookstore.book.application.FindBookView;
 import com.kfp.bookstore.book.application.ListBooks;
 import com.kfp.bookstore.book.application.UpdateBook;
 import com.kfp.bookstore.book.domain.Book;
+import com.kfp.bookstore.book.domain.BookView;
 import com.kfp.bookstore.book.domain.exception.BookNotFoundException;
 import com.kfp.bookstore.book.domain.exception.InvalidInputException;
 import com.kfp.bookstore.book.infrastructure.record.BookRecord;
@@ -34,6 +36,7 @@ public class BookController {
     private final UpdateBook updateBook;
     private final FindBook findBook;
     private final DeleteBook deleteBook;
+    private final FindBookView findBookView;
 
     @GetMapping
     ResponseEntity<List<Book>> list(){
@@ -44,6 +47,12 @@ public class BookController {
     ResponseEntity<Book> get(
             @PathVariable("bookId") Integer bookId){
         return new ResponseEntity<>(findBook.execute(bookId), HttpStatus.OK);
+    }
+
+    @GetMapping("/view/{bookId}")
+    ResponseEntity<BookView> getView(
+            @PathVariable("bookId") Integer bookId){
+        return new ResponseEntity<>(findBookView.execute(bookId), HttpStatus.OK);
     }
 
     @PostMapping

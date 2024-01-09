@@ -7,4 +7,5 @@ public interface BookRepository {
     void save(Book book);
     Book findById(Integer id);
     void delete(Book book);
+    BookView getBookView(Integer id);
 }

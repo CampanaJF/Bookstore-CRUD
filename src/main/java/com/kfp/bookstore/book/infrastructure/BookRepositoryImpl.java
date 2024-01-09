@@ -2,6 +2,7 @@ package com.kfp.bookstore.book.infrastructure;
 
 import com.kfp.bookstore.book.domain.Book;
 import com.kfp.bookstore.book.domain.BookRepository;
+import com.kfp.bookstore.book.domain.BookView;
 import com.kfp.bookstore.book.domain.exception.BookNotFoundException;
 import com.kfp.bookstore.book.infrastructure.jpa.BookJpaRepository;
 import lombok.AllArgsConstructor;
@@ -33,5 +34,10 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public void delete(Book book) {
         bookJpaRepository.delete(book);
+    }
+
+    @Override
+    public BookView getBookView(Integer id) {
+        return bookJpaRepository.getAuthorAndTitleById(id);
     }
 }
