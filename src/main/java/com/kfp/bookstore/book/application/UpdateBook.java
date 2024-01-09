@@ -15,24 +15,25 @@ public class UpdateBook {
     private final BookRepository bookRepository;
     public void execute(Integer bookId, Book book) {
 
+        book.setInventory(getBook(bookId).getInventory());
+        book.setId(bookId);
+
         bookValidator(book);
 
-        Book toUpdate = getBook(bookId);
-
-        toUpdate.setTitle(book.getTitle());
-        toUpdate.setAuthor(book.getAuthor());
-        toUpdate.setDateOfPublishing(book.getDateOfPublishing());
-        toUpdate.setPublisher(book.getPublisher());
-        toUpdate.setSubjects(book.getSubjects());
-
-        this.bookRepository.save(toUpdate);
+        this.bookRepository.save(book);
     }
 
     private void bookValidator(Book book) {
+        validateExistingBook(book.getId());
         validateStrings(book.getAuthor(),book.getTitle(),book.getPublisher());
         validateDate(book.getDateOfPublishing());
     }
 
+    private void validateExistingBook(Integer bookId) {
+        if(getBook(bookId)==null){
+            throw new InvalidInputException("The book with that id does not exist");
+        }
+    }
 
     private void validateStrings(String author, String title, String publisher) {
         if(author.isEmpty() || title.isEmpty() || publisher.isEmpty()){

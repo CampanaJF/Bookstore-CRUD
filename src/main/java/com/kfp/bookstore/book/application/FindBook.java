@@ -13,8 +13,6 @@ public class FindBook {
 
     public Book execute(Integer bookId){
 
-        Book found = bookRepository.findById(bookId);
-
         return bookRepository.findById(bookId);
     }
 
