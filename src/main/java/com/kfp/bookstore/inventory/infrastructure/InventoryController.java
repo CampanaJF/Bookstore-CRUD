@@ -2,6 +2,7 @@ package com.kfp.bookstore.inventory.infrastructure;
 
 import com.kfp.bookstore.inventory.application.ObtainInventory;
 import com.kfp.bookstore.inventory.domain.Inventory;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class InventoryController {
 
     private final ObtainInventory obtainInventory;
 
+    @Hidden
     @GetMapping
     ResponseEntity<List<Inventory>> list(){
 

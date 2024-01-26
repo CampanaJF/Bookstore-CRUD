@@ -11,6 +11,9 @@ import com.kfp.bookstore.book.domain.BookView;
 import com.kfp.bookstore.book.domain.exception.BookNotFoundException;
 import com.kfp.bookstore.book.domain.exception.InvalidInputException;
 import com.kfp.bookstore.book.infrastructure.record.BookRecord;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Tag(name = "bookstore")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/books")
@@ -49,6 +53,17 @@ public class BookController {
         return new ResponseEntity<>(findBook.execute(bookId), HttpStatus.OK);
     }
 
+    @Operation(
+            description = "The view/projection of a book, this view only has a single field" +
+                    " that hold the title and the name of the author",
+            summary =  "gets a book view of a certain book",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    )
+            }
+    )
     @GetMapping("/view/{bookId}")
     ResponseEntity<BookView> getView(
             @PathVariable("bookId") Integer bookId){
