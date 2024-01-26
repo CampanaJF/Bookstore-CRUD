@@ -1,15 +1,15 @@
 
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    defer-datasource-initialization: true
-    show-sql: true
   datasource:
     username: root
     password: 11037
     url: jdbc:mysql://localhost:3306/kfp_bookstore
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    show-sql: true
   sql:
     init:
       mode: always
